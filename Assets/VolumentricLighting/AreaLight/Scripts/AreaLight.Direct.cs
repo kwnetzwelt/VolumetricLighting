@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public partial class AreaLight : MonoBehaviour
 {
-	[HideInInspector]
+	//[HideInInspector]
 	public Mesh m_Cube;
 	[HideInInspector]
 	public Shader m_ProxyShader;
@@ -105,8 +105,9 @@ public partial class AreaLight : MonoBehaviour
 
 		if (m_Shadows)
 			SetUpShadowmapForSampling(buf);
-
-		Matrix4x4 m = Matrix4x4.TRS(new Vector3(0, 0, 10.0f), Quaternion.identity, Vector3.one * 20);
+        var bounds = GetFrustumBounds();
+        float max = Mathf.Max(Mathf.Max(bounds.size.x, bounds.size.y), bounds.size.z);
+        Matrix4x4 m = Matrix4x4.TRS(new Vector3(0, 0, max * 0.5f), Quaternion.identity, Vector3.one * max);
 		buf.DrawMesh(m_Cube, t.localToWorldMatrix * m, m_ProxyMaterial, 0, m_Shadows ? /*shadows*/ 0 : /*no shadows*/ 1);
 	}
 
